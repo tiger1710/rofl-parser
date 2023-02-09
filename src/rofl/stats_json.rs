@@ -1,12 +1,11 @@
-
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 use super::player::Player;
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize, Debug)]
 pub struct StatsJson {
-    statsJson: Vec<Player>
+    statsJson: Vec<Player>,
 }
 
 impl StatsJson {

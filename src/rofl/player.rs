@@ -1,5 +1,4 @@
-
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize, Debug)]
@@ -158,5 +157,5 @@ pub struct Player {
     WAS_AFK_AFTER_FAILED_SURRENDER: String,
     WAS_EARLY_SURRENDER_ACCOMPLICE: String,
     WAS_SURRENDER_DUE_TO_AFK: String,
-    WIN: String
+    WIN: String,
 }

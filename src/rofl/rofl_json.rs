@@ -1,9 +1,8 @@
-
 use std::error::Error;
 
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
-use super::{stats_json::StatsJson, player::Player};
+use super::{player::Player, stats_json::StatsJson};
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize, Debug)]
