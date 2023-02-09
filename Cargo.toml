@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 license = "Apache-2.0"
 description = "Parse useable data from `*.rofl` file"
+repository = "https://github.com/tiger1710/rofl-parser"
 
 exclude = [
     "*.rofl"
