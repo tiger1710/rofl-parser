@@ -7,15 +7,15 @@ use super::{player::Player, stats_json::StatsJson};
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RoflJson {
-    gameLength: i32,
-    gameVersion: String,
-    lastGameChunkId: i32,
-    lastKeyFrameId: i32,
+    pub gameLength: i32,
+    pub gameVersion: String,
+    pub lastGameChunkId: i32,
+    pub lastKeyFrameId: i32,
     statsJson: String,
 }
 
 impl RoflJson {
-    pub fn get_stats_json(&self) -> Result<StatsJson, Box<dyn Error>> {
+    pub fn parse_stats_json(&self) -> Result<StatsJson, Box<dyn Error>> {
         let players: Vec<Player> = serde_json::from_str(&self.statsJson)?;
         Ok(StatsJson::new(players))
     }
