@@ -1,12 +1,12 @@
 # rofl-parser
-Parse useable data from `*.rofl` file
+Parse useable data from `*.rofl` file. (League of Legends replay file)
 
 # Usage
 
 ## 1. Parse form file
 
 ```rust
-fn parse_rofl_file() -> Result<(), Box<dyn Error>> {
+fn parse_rofl() -> Result<(), Box<dyn Error>> {
     let mut rofl = Rofl::new();
     let _ = rofl.parse_rofl_file("*.rofl")?; // rofl file download needed
 
@@ -25,7 +25,7 @@ fn parse_rofl_file() -> Result<(), Box<dyn Error>> {
 If we have `[u8]` data, parse from data
 
 ```rust
-fn parse_rofl_file(data: &[u8]) -> Result<(), Box<dyn Error>> {
+fn parse_rofl(data: &[u8]) -> Result<(), Box<dyn Error>> {
     let mut rofl = Rofl::new();
     let _ = rofl.parse_rofl_data(data)?;
 
