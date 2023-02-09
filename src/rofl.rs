@@ -1,5 +1,5 @@
 mod player;
-pub mod rofl_json;
+mod rofl_json;
 mod stats_json;
 
 use std::{error::Error, fs::File, io::Read, path::Path};
@@ -31,11 +31,7 @@ impl Rofl {
         buf
     }
 
-    fn parse_rofl_to_string<P>(&mut self, file: P)
-    where
-        P: AsRef<Path>,
-    {
-        let buf = self.read_rofl(file);
+    fn parse_rofl_to_string(&mut self, buf: &[u8]) {
         let start = b"{\"gameLength\"";
         let end = b"\"}]\"}";
 
@@ -54,20 +50,33 @@ impl Rofl {
             .to_string();
     }
 
-    pub fn parse_rofl<P>(&mut self, rofl_file: P) -> Result<(), Box<dyn Error>>
+    pub fn parse_rofl_file<P>(&mut self, rofl_file: P) -> Result<(), Box<dyn Error>>
     where
         P: AsRef<Path>,
     {
-        self.parse_rofl_to_string(rofl_file);
+        let buf = self.read_rofl(rofl_file);
+        self.parse_rofl_to_string(&buf);
         self.rofl_json = serde_json::from_str(&self.rofl_string)?;
+        if let Some(rofl_json) = &self.rofl_json {
+            self.stats_json = Some(rofl_json.parse_stats_json()?);
+        }
         Ok(())
     }
 
-    pub fn get_rofl_json(&self) -> &RoflJson {
-        self.rofl_json.as_ref().expect("rofl_json is None.")
+    pub fn parse_rofl_data(&mut self, data: &[u8]) -> Result<(), Box<dyn Error>> {
+        self.parse_rofl_to_string(data);
+        self.rofl_json = serde_json::from_str(&self.rofl_string)?;
+        if let Some(rofl_json) = &self.rofl_json {
+            self.stats_json = Some(rofl_json.parse_stats_json()?);
+        }
+        Ok(())
     }
 
-    pub fn get_stats_json(&self) -> &StatsJson {
-        self.stats_json.as_ref().expect("stats_json is None.")
+    pub fn get_rofl_json(&self) -> Option<&RoflJson> {
+        self.rofl_json.as_ref()
+    }
+
+    pub fn get_stats_json(&self) -> Option<&StatsJson> {
+        self.stats_json.as_ref()
     }
 }
