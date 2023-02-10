@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use super::{player::Player, stats_json::StatsJson};
 
 #[allow(non_snake_case)]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct RoflJson {
     pub gameLength: i32,
     pub gameVersion: String,
