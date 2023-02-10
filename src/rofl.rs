@@ -1,6 +1,6 @@
-mod player;
-mod rofl_json;
-mod stats_json;
+pub mod player;
+pub mod rofl_json;
+pub mod stats_json;
 
 use std::{error::Error, fs::File, io::Read, path::Path};
 
