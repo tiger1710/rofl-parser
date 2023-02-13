@@ -1,15 +1,13 @@
 pub mod player;
 pub mod rofl_json;
-pub mod stats_json;
 
-use std::{error::Error, fs::File, io::Read, path::Path};
+use std::{fs::File, io::Read, path::Path};
 
-use self::{rofl_json::RoflJson, stats_json::StatsJson};
+use self::rofl_json::{MockRoflJson, RoflJson};
 
 pub struct Rofl {
     rofl_string: String,
     rofl_json: Option<RoflJson>,
-    stats_json: Option<StatsJson>,
 }
 
 impl Rofl {
@@ -17,7 +15,6 @@ impl Rofl {
         Rofl {
             rofl_string: String::new(),
             rofl_json: None,
-            stats_json: None,
         }
     }
 
@@ -50,33 +47,45 @@ impl Rofl {
             .to_string();
     }
 
-    pub fn parse_rofl_file<P>(&mut self, rofl_file: P) -> Result<(), Box<dyn Error>>
+    pub fn parse_rofl_file<P>(&mut self, rofl_file: P) -> anyhow::Result<()>
     where
         P: AsRef<Path>,
     {
         let buf = self.read_rofl(rofl_file);
         self.parse_rofl_to_string(&buf);
-        self.rofl_json = serde_json::from_str(&self.rofl_string)?;
-        if let Some(rofl_json) = &self.rofl_json {
-            self.stats_json = Some(rofl_json.parse_stats_json()?);
-        }
+
+        let mock_rofl_json: MockRoflJson = serde_json::from_str(&self.rofl_string)?;
+        let stats_json = mock_rofl_json.parse_stats_json()?;
+
+        self.rofl_json = Some(RoflJson {
+            gameLength: mock_rofl_json.gameLength,
+            gameVersion: mock_rofl_json.gameVersion,
+            lastGameChunkId: mock_rofl_json.lastGameChunkId,
+            lastKeyFrameId: mock_rofl_json.lastKeyFrameId,
+            statsJson: stats_json,
+        });
+
         Ok(())
     }
 
-    pub fn parse_rofl_data(&mut self, data: &[u8]) -> Result<(), Box<dyn Error>> {
+    pub fn parse_rofl_data(&mut self, data: &[u8]) -> anyhow::Result<()> {
         self.parse_rofl_to_string(data);
-        self.rofl_json = serde_json::from_str(&self.rofl_string)?;
-        if let Some(rofl_json) = &self.rofl_json {
-            self.stats_json = Some(rofl_json.parse_stats_json()?);
-        }
+
+        let mock_rofl_json: MockRoflJson = serde_json::from_str(&self.rofl_string)?;
+        let stats_json = mock_rofl_json.parse_stats_json()?;
+
+        self.rofl_json = Some(RoflJson {
+            gameLength: mock_rofl_json.gameLength,
+            gameVersion: mock_rofl_json.gameVersion,
+            lastGameChunkId: mock_rofl_json.lastGameChunkId,
+            lastKeyFrameId: mock_rofl_json.lastKeyFrameId,
+            statsJson: stats_json,
+        });
+
         Ok(())
     }
 
     pub fn get_rofl_json(&self) -> Option<&RoflJson> {
         self.rofl_json.as_ref()
-    }
-
-    pub fn get_stats_json(&self) -> Option<&StatsJson> {
-        self.stats_json.as_ref()
     }
 }
