@@ -11,10 +11,8 @@ fn parse_rofl() -> Result<(), Box<dyn Error>> {
     let _ = rofl.parse_rofl_file("*.rofl")?; // rofl file download needed
 
     let rofl_json = rofl.get_rofl_json(); // get full rofl info
-    let stats_json = rofl.get_stats_json(); // get player data
 
     assert!(rofl_json.is_some());
-    assert!(stats_json.is_some());
 
     Ok(())
 }
@@ -30,10 +28,8 @@ fn parse_rofl(data: &[u8]) -> Result<(), Box<dyn Error>> {
     let _ = rofl.parse_rofl_data(data)?;
 
     let rofl_json = rofl.get_rofl_json();
-    let stats_json = rofl.get_stats_json();
 
     assert!(rofl_json.is_some());
-    assert!(stats_json.is_some());
 
     Ok(())
 }
