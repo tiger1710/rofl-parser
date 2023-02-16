@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::player::Player;
+use super::player_13_3::Player;
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize, Debug, Clone)]
