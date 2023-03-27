@@ -3,7 +3,7 @@ Parse useable data from `*.rofl` file. (League of Legends replay file)
 
 # Usage
 
-## 1. Parse form file
+## 1. Parse from file
 
 ```rust
 fn parse_rofl() -> Result<(), Box<dyn Error>> {
