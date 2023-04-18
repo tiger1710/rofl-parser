@@ -14,7 +14,31 @@ mod tests {
     }
 
     #[test]
-    fn parse_rofl_file() -> anyhow::Result<()> {
+    fn parse_rofl_file_v12_3() -> anyhow::Result<()> {
+        let mut rofl = Rofl::new();
+        let _ = rofl.parse_rofl_file("KR-5736537983.rofl")?;
+
+        let rofl_json = rofl.get_rofl_json();
+
+        if let Some(rofl_json) = rofl_json {
+            let parsed = serde_json::to_string_pretty(rofl_json)?;
+            let parsed: String = parsed.split_whitespace().collect();
+
+            let mut f = File::open("rofl.json").expect("Can't open file.");
+            let mut buf = String::new();
+            f.read_to_string(&mut buf).expect("Can't read file.");
+            let buf: String = buf.split_whitespace().collect();
+
+            assert_eq!(parsed, buf);
+        }
+
+        assert!(rofl_json.is_some());
+
+        Ok(())
+    }
+
+    #[test]
+    fn parse_rofl_file_v13_3() -> anyhow::Result<()> {
         let mut rofl = Rofl::new();
         let _ = rofl.parse_rofl_file("KR-6363178603.rofl")?;
 

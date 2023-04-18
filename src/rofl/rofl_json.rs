@@ -1,6 +1,11 @@
 use serde::{Deserialize, Serialize};
 
-use super::player_13_3::Player;
+#[derive(Serialize, Deserialize, Debug, Clone)]
+#[serde(untagged)]
+pub enum Player {
+    V13_3(super::player_13_3::Player),
+    V12_3(super::player_12_3::Player),
+}
 
 #[allow(non_snake_case)]
 #[derive(Serialize, Deserialize, Debug, Clone)]
